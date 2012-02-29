@@ -25,6 +25,20 @@ public abstract class AbstractJSCoverageMojo
      */
     private boolean skipCoverage;
 
+    /**
+     * jscoverage-server.exe location.
+     *
+     * @parameter default-value="jscoverage-server.exe" expression="${jscoverage.jscoverageServer}"
+     */
+    protected String jscoverageServer;
+
+    /**
+     * jscoverage.exe location.
+     *
+     * @parameter default-value="jscoverage.exe" expression="${jscoverage.jscoverage}"
+     */
+    protected String jscoverage;
+
     public AbstractJSCoverageMojo()
     {
         super();
@@ -61,18 +75,16 @@ public abstract class AbstractJSCoverageMojo
             }
         };
 
-        try
-        {
-            int code = CommandLineUtils.executeCommandLine( cmd, logger, logger );
-
-            if ( code != 0 )
-            {
-                throw new MojoFailureException( "Failed to invoke jscoverage, see log for details" );
+        try {
+            if ( spawnProcess() ) {
+                CommandLineUtils.executeCommandLineAsCallable(cmd, null, logger, logger, -1);
+            } else {
+                CommandLineUtils.executeCommandLine(cmd, logger, logger);
             }
-        }
-        catch ( CommandLineException e )
+
+        } catch (CommandLineException e)
         {
-            throw new MojoExecutionException( e.getMessage(), e );
+            throw new MojoExecutionException(e.getMessage(), e);
         }
     }
 
@@ -80,6 +92,8 @@ public abstract class AbstractJSCoverageMojo
     {
         return false;
     }
+
+    protected abstract boolean spawnProcess();
 
     protected abstract void customizeCommandLine( Commandline cmd );
 

@@ -100,7 +100,13 @@ public class JSCoverageInstrumentMojo
     @Override
     protected String getExecutable()
     {
-        return "jscoverage";
+        return jscoverage;
+    }
+
+    @Override
+    protected boolean spawnProcess()
+    {
+        return false;
     }
 
     @Override

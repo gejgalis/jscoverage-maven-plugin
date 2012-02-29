@@ -10,6 +10,12 @@ public class JSCoverageServerShutdownMojo
     extends AbstractJSCoverageMojo
 {
 
+    @Override
+    protected boolean spawnProcess()
+    {
+        return false;
+    }
+
     protected void customizeCommandLine( Commandline cmd )
     {
         cmd.createArg().setValue( "--shutdown" );
@@ -17,6 +23,6 @@ public class JSCoverageServerShutdownMojo
 
     protected String getExecutable()
     {
-        return "jscoverage-server";
+        return jscoverageServer;
     }
 }
