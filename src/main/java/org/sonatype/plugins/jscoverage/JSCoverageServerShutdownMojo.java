@@ -7,8 +7,14 @@ import org.codehaus.plexus.util.cli.Commandline;
  * @phase post-integration-test
  */
 public class JSCoverageServerShutdownMojo
-    extends AbstractJSCoverageMojo
+        extends AbstractJSCoverageMojo
 {
+    /**
+     * Stop server on the port given by PORT.
+     *
+     * @parameter default-value="8080" expression="${jscoverage.port}"
+     */
+    private int port;
 
     @Override
     protected boolean spawnProcess()
@@ -19,6 +25,7 @@ public class JSCoverageServerShutdownMojo
     protected void customizeCommandLine( Commandline cmd )
     {
         cmd.createArg().setValue( "--shutdown" );
+        cmd.createArg().setValue( "--port=" + port );
     }
 
     protected String getExecutable()
